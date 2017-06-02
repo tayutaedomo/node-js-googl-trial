@@ -1,11 +1,30 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
+<% layout('layout') -%>
+
+<!--<h1><%= title %></h1>-->
+
+<div class="row">
+  <div class="col-sm-6">
+    <h2>node-google-url</h2>
+    <label>https://www.npmjs.com/package/google-url</label>
+    <label>https://github.com/BlueRival/node-google-url</label>
+
+    <div class="list-group">
+      <a class="list-group-item" href="/google-url/shorten">Shorten</a>
+      <a class="list-group-item" href="/google-url/expand">Expand</a>
+      <a class="list-group-item" href="/google-url/analytics">Analytics</a>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <h2>goo.gl</h2>
+    <label>https://www.npmjs.com/package/goo.gl</label>
+    <label>https://github.com/kaimallea/node-googl</label>
+
+    <div class="list-group">
+      <a class="list-group-item" href="/googl/shorten">Shorten</a>
+      <a class="list-group-item" href="/googl/expand">Expand</a>
+      <a class="list-group-item" href="/googl/analytics">Analytics</a>
+    </div>
+  </div>
+</div>
+
