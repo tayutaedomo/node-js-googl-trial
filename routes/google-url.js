@@ -6,9 +6,10 @@ var express = require('express');
 var router = express.Router();
 
 var beautify = require('js-beautify').js_beautify;
-var GoogleUrl = require( 'google-url' );
+var GoogleUrl = require('google-url');
 
 var TITLE_SHORTEN = 'google-url Shorten API';
+var TITLE_EXPAND = 'google-url Extend API';
 
 
 function createGoogleUrl() {
@@ -24,6 +25,8 @@ router.get('/shorten', function(req, res, next) {
 
 router.post('/shorten', function(req, res, next) {
   var googleUrl = createGoogleUrl();
+
+  debug('shorten req.body', req.body);
 
   googleUrl.shorten(req.body.url, function(err, result) {
     debug('shorten', result, err);
@@ -50,7 +53,39 @@ router.post('/shorten', function(req, res, next) {
 });
 
 router.get('/expand', function(req, res, next) {
-  res.send('respond with a resource');
+  res.render('google-url/expand', {
+    title: TITLE_EXPAND,
+    data: {}
+  });
+});
+
+router.post('/expand', function(req, res, next) {
+  var googleUrl = createGoogleUrl();
+
+  debug('expand req.body', req.body);
+
+  googleUrl.expand(req.body.url, function(err, result) {
+    debug('expand', result, err);
+
+    if (err) {
+      res.render('google-url/expand', {
+        title: TITLE_SHORTEN,
+        data: {
+          error: err,
+          errorStr: beautify(JSON.stringify(err), { indent_size: 2 })
+        }
+      });
+
+    } else {
+      res.render('google-url/expand', {
+        title: TITLE_SHORTEN,
+        data: {
+          result: result,
+          resultStr: result ? beautify(JSON.stringify(result), { indent_size: 2 }) : ''
+        }
+      });
+    }
+  });
 });
 
 router.get('/analytics', function(req, res, next) {
