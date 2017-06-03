@@ -10,6 +10,7 @@ var GoogleUrl = require('google-url');
 
 var TITLE_SHORTEN = 'google-url Shorten API';
 var TITLE_EXPAND = 'google-url Extend API';
+var TITLE_ANALYTICS = 'google-url Analytics API';
 
 
 function createGoogleUrl() {
@@ -31,24 +32,20 @@ router.post('/shorten', function(req, res, next) {
   googleUrl.shorten(req.body.url, function(err, result) {
     debug('shorten', result, err);
 
-    if (err) {
-      res.render('google-url/shorten', {
-        title: TITLE_SHORTEN,
-        data: {
-          error: err,
-          errorStr: beautify(JSON.stringify(err), { indent_size: 2 })
-        }
-      });
+    var payload = {
+      title: TITLE_SHORTEN,
+      data: {}
+    };
 
+    if (err) {
+      payload.data.error = err;
+      payload.data.errorStr = beautify(JSON.stringify(err), { indent_size: 2 });
     } else {
-      res.render('google-url/shorten', {
-        title: TITLE_SHORTEN,
-        data: {
-          result: result,
-          resultStr: result ? beautify(JSON.stringify(result), { indent_size: 2 }) : ''
-        }
-      });
+      payload.data.result = result;
+      payload.data.resultStr = result ? beautify(JSON.stringify(result), { indent_size: 2 }) : '';
     }
+
+    res.render('google-url/shorten', payload);
   });
 });
 
@@ -67,29 +64,53 @@ router.post('/expand', function(req, res, next) {
   googleUrl.expand(req.body.url, function(err, result) {
     debug('expand', result, err);
 
-    if (err) {
-      res.render('google-url/expand', {
-        title: TITLE_SHORTEN,
-        data: {
-          error: err,
-          errorStr: beautify(JSON.stringify(err), { indent_size: 2 })
-        }
-      });
+    var payload = {
+      title: TITLE_EXPAND,
+      data: {}
+    };
 
+    if (err) {
+      payload.data.error = err;
+      payload.data.errorStr = beautify(JSON.stringify(err), { indent_size: 2 });
     } else {
-      res.render('google-url/expand', {
-        title: TITLE_SHORTEN,
-        data: {
-          result: result,
-          resultStr: result ? beautify(JSON.stringify(result), { indent_size: 2 }) : ''
-        }
-      });
+      payload.data.result = result;
+      payload.data.resultStr = result ? beautify(JSON.stringify(result), { indent_size: 2 }) : '';
     }
+
+    res.render('google-url/expand', payload);
   });
 });
 
 router.get('/analytics', function(req, res, next) {
-  res.send('respond with a resource');
+  res.render('google-url/analytics', {
+    title: TITLE_ANALYTICS,
+    data: {}
+  });
+});
+
+router.post('/analytics', function(req, res, next) {
+  var googleUrl = createGoogleUrl();
+
+  debug('analytics req.body', req.body);
+
+  googleUrl.analytics(req.body.url, function(err, result) {
+    debug('analytics', result, err);
+
+    var payload = {
+      title: TITLE_ANALYTICS,
+      data: {}
+    };
+
+    if (err) {
+      payload.data.error = err;
+      payload.data.errorStr = beautify(JSON.stringify(err), { indent_size: 2 });
+    } else {
+      payload.data.result = result;
+      payload.data.resultStr = result ? beautify(JSON.stringify(result), { indent_size: 2 }) : '';
+    }
+
+    res.render('google-url/analytics', payload);
+  });
 });
 
 
